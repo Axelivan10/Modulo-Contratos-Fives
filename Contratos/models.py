@@ -3,7 +3,7 @@ from django.db.models.deletion import CASCADE
 from django.db.models.enums import Choices
 from django.db.models.fields import AutoField, CharField, IntegerField, TextField
 from django.utils import tree
-from safedelete.models import SafeDeleteModel
+#from safedelete.models import SafeDeleteModel
 from safedelete.models import HARD_DELETE_NOCASCADE
 
 
