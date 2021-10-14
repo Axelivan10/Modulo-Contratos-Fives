@@ -28,17 +28,57 @@ defsend_mail(
 
 '''
 
-def wenas(request, name):
-    notify_user(name)
-    return HttpResponse("HOLA MUNDO"+ name)
+def vista(request):
+    notify_user()
+    return HttpResponse("HOLA MUNDO")
 
 
 @background(schedule=20)
-def notify_user(user_id):
-    send_email_contrato(user_id)
+def notify_user():
+    send_email_contrato()
     print("ya se envio esa mother")
     
 
+def send_email_contrato():
+    imprimir_vencidos=""
+    correo = ""
+
+
+    hoy = datetime.today()
+    fecha_vencimiento= hoy + timedelta(days=30)
+    dicc_vencidos = Dato_contrato.objects.filter(fecha_fin__range=[hoy,fecha_vencimiento])
+
+    for impresion in dicc_vencidos:
+            print(impresion)
+
+
+    if dicc_vencidos.exists():
+        #imprimir_vencidos= str(dicc_vencidos)
+        for contrato in dicc_vencidos:
+            if (contrato.nombre_departamento.count() > 0):
+
+                for departamento in contrato.nombre_departamento.all(): 
+                    print(departamento.nombre)
+                    for correo in contrato.nombre_departamento.all():
+                       #depa_nombre = correo.correo_encargado
+                        print(correo.correo_encargado)
+            
+                    send_mail(
+                    'RECORDATORIO CONTRATOS THE FIVES BEACH',
+                    'Buen día, le recuerdo que el contrato ' + contrato.nombre_contrato  + ' del departamento de ' +
+                    departamento.nombre + ' esta a punto de expirar',
+                    settings.EMAIL_HOST_USER,
+                    [correo.correo_encargado],
+                    fail_silently=False
+                    )
+                    
+                    
+    else:
+        print("NO TIENES CONTRATOS POR VENCER ")
+        
+
+
+'''
 def send_email_contrato(user_id):
     nombre_contratos = Dato_contrato.objects.all()
     fiscal = Dato_contrato.objects.filter(id=9)
@@ -64,4 +104,18 @@ def send_email_contrato(user_id):
     [correo],
     fail_silently=False
     )
+
+
+
+
+    for contratos in nombre_contratos:
+        print(contratos.nombre_hotel)
+
+
+  if Departamento.objects.filter(name=Departamento.nombre).count():
+
+for dicc_vencidos in Dato_contrato.objects.filter(fecha_fin__range=[hoy,fecha_vencimiento]):
+        print (dicc_vencidos)
+        lista.append(dicc_vencidos)
+    '''
 

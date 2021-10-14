@@ -23,7 +23,7 @@ from scripts.scripts import *
 urlpatterns = [
     path('admin/', admin.site.urls),
     #path('hola/<str:name>', hola, name="hola"),
-    path('wenas/<str:name>', wenas, name="wenas"),
+    path('vista/', vista, name="vista"),
 ]
 
  
