@@ -6,42 +6,20 @@ from Contratos.models import *
 from datetime import datetime, timedelta
 from django.conf import settings
 from django.core.mail import send_mail
- 
-'''
-
-@background(schedule=60)
-def notify_user(user_id):
-    # lookup user by id and send them a message
-    user = User.objects.get(pk=user_id)
-    user.email_user('Here is a notification', 'You have been notified')'''
-
-'''
-from django.core.mail import send_mail
-
-defsend_mail(
-    'Subject here',
-    'Here is the message.',
-    'axelivan02@gmail.com',
-    ['1902088@utrivieramaya.edu.mx'],
-    fail_silently=False,
-)
-
-'''
 
 def vista(request):
     notify_user()
     return HttpResponse("HOLA MUNDO")
 
 
-@background(schedule=20)
+#@background(schedule=20)
 def notify_user():
     send_email_contrato()
     print("ya se envio esa mother")
     
 
 def send_email_contrato():
-    imprimir_vencidos=""
-    correo = ""
+    imprimir_fecha=""
 
 
     hoy = datetime.today()
@@ -62,11 +40,12 @@ def send_email_contrato():
                     for correo in contrato.nombre_departamento.all():
                        #depa_nombre = correo.correo_encargado
                         print(correo.correo_encargado)
-            
+                        
+                    imprimir_fecha= str(contrato.fecha_fin)
                     send_mail(
                     'RECORDATORIO CONTRATOS THE FIVES BEACH',
-                    'Buen día, le recuerdo que el contrato ' + contrato.nombre_contrato  + ' del departamento de ' +
-                    departamento.nombre + ' esta a punto de expirar',
+                    'Buen día, le recuerdo que el contrato con nombre: ' + contrato.nombre_contrato.upper()+ ' del departamento: ' +
+                    departamento.nombre.upper() + ' esta a punto de expirar en la fecha de:  '+ imprimir_fecha,
                     settings.EMAIL_HOST_USER,
                     [correo.correo_encargado],
                     fail_silently=False

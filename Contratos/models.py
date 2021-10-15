@@ -34,7 +34,7 @@ class Nombre_representante(models.Model):
 
 class Estado(models.Model):
     id=AutoField(primary_key=True)
-    estado=models.CharField(max_length=10,verbose_name= "Estado Contrato")
+    estado=models.CharField(max_length=20,verbose_name= "Estado Contrato")
 
     def __str__(self):
         return "{}".format(self.estado)
@@ -45,14 +45,15 @@ class Departamento(models.Model):
     nombre=models.CharField(max_length=50, verbose_name="Nombre Departamento")
     correo_encargado=models.EmailField(verbose_name="Correo Encargado")
 
+
     def __str__(self):
         return self.nombre
 
 class Dato_proveedor(models.Model):
     id=models.AutoField(primary_key=True)
-    nombre_proveedores=models.CharField(max_length=50,blank=True, null=True)
+    nombre_proveedor=models.CharField(max_length=50,blank=True, null=True)
     nombre_fiscal=models.CharField(max_length=50)
-    rfc=models.CharField(max_length=13)
+    rfc=models.CharField(max_length=13, verbose_name="RFC")
     telefono_empresa=models.CharField(max_length=20)
     email=models.EmailField()
     nombre_representante=models.CharField(max_length=50, null=True, blank=True)
@@ -60,7 +61,7 @@ class Dato_proveedor(models.Model):
     observaciones=models.TextField(max_length=200)
 
     def __str__(self):
-        return self.nombre_proveedores+" / "+self.nombre_fiscal
+        return self.nombre_proveedor
    
     class Meta:
         verbose_name='Proveedor'
@@ -73,13 +74,13 @@ class Dato_the_fives(models.Model):
     id=models.AutoField(primary_key=True)
     nombre_hotel=models.CharField(max_length=50)
     razon_social=models.CharField(max_length=50, null=True)
-    rfc=models.CharField(max_length=13, null=True)
+    rfc=models.CharField(max_length=13, null=True, verbose_name="RFC")
     razon_comercial=models.CharField(max_length=50, null=True)
     nombre_representante=models.CharField(max_length=30)
     telefono_responsable=models.CharField(max_length=20)
 
     def __str__(self):
-        return self.nombre_hotel+" / "+self.razon_social
+        return self.nombre_hotel
 
 
     class Meta:
@@ -89,7 +90,7 @@ class Dato_contrato(models.Model):
     _safedelete_policy = HARD_DELETE_NOCASCADE
 
     id=models.AutoField(primary_key=True)
-    nombre_contrato=models.CharField(max_length=30, )
+    nombre_contrato=models.CharField(max_length=50 )
     periodos=models.CharField(max_length=10, blank=True, null=True)
     duracion_periodo=models.CharField(max_length=20, blank=True, null=True)
     precio_periodo=models.CharField(max_length=20,blank=True, null=True)
@@ -99,13 +100,13 @@ class Dato_contrato(models.Model):
     estado=models.ManyToManyField(Estado)
     nombre_departamento=models.ManyToManyField(Departamento)
     archivo = models.FileField('Contrato',upload_to='Contratos/%Y/%m', blank=True, null=True)
-    fecha_subida_documento = models.DateTimeField(auto_now = True, blank=True, null=True)
-    empresa=models.ForeignKey(Dato_the_fives, null=True, blank=True, on_delete=models.DO_NOTHING)
+    fecha_modificacion = models.DateTimeField(auto_now = True, blank=True, null=True, verbose_name="Fecha Modificación")
+    empresa=models.ForeignKey(Dato_the_fives, null=True, blank=True,verbose_name="Hotel", on_delete=models.DO_NOTHING)
     proveedor=models.ForeignKey(Dato_proveedor, null=True, blank=True, on_delete=models.DO_NOTHING)
 
 
     def __str__(self):  
-        return '{} {} {} {}'.format(self.id,self.nombre_contrato, self.fecha_inicio, self.fecha_fin)
+        return '{} / {}'.format(self.id,self.nombre_contrato)
 
     class Meta:
         verbose_name='Contrato'
